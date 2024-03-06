@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { months } from "../../utils/dateUtils";
 
 import "./header.scss";
+import Modal from "../modal/Modal";
 
 const Header = ({
   nextWeek,
@@ -9,12 +10,24 @@ const Header = ({
   thisWeek,
   weekStartDate,
   weekEndDate,
+  events,
+  addEvent,
 }) => {
+  const [modalInfoIsOpen, setModalInfo] = useState(false);
+
   return (
     <header className="header">
-      <button className="button create-event-btn">
+      <button
+        className="button create-event-btn"
+        onClick={() => setModalInfo(true)}>
         <i className="fas fa-plus create-event-btn__icon"></i>Create
       </button>
+      <Modal
+        isOpen={modalInfoIsOpen}
+        onClose={() => setModalInfo(false)}
+        events={events}
+        onSubmit={addEvent}
+      />
       <div className="navigation">
         <button className="navigation__today-btn button" onClick={thisWeek}>
           Today

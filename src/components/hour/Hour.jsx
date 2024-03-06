@@ -1,12 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 
-import Event from '../event/Event';
-import { formatMins } from '../../../src/utils/dateUtils.js';
+import Event from "../event/Event";
+import { formatMins } from "../../../src/utils/dateUtils.js";
 
-const Hour = ({ dataHour, hourEvents }) => {
+const Hour = ({ dataHour, hourEvents, removeEvent, dataDay }) => {
+  const [marginTopData, setMarginTopData] = useState(
+    new Date().getMinutes() - 2
+  );
+  const [eventClicked, setEventClicked] = useState(false);
+  let timerOfUpdatingRedLine = setInterval(() => {
+    setMarginTopData(marginTopData + 1);
+  }, 60000);
+
+  useEffect(() => {});
+
   return (
     <div className="calendar__time-slot" data-time={dataHour + 1}>
-      {/* if no events in the current hour nothing will render here */}
       {hourEvents.map(({ id, dateFrom, dateTo, title }) => {
         const eventStart = `${dateFrom.getHours()}:${formatMins(
           dateFrom.getMinutes()
@@ -18,14 +27,22 @@ const Hour = ({ dataHour, hourEvents }) => {
         return (
           <Event
             key={id}
-            //calculating event height = duration of event in minutes
+            id={id}
             height={(dateTo.getTime() - dateFrom.getTime()) / (1000 * 60)}
             marginTop={dateFrom.getMinutes()}
             time={`${eventStart} - ${eventEnd}`}
             title={title}
+            removeEvent={removeEvent}
+            clickOnEvent={() => setEventClicked(!eventClicked)}
+            clickStatus={eventClicked}
           />
         );
       })}
+
+      {dataDay === new Date().getDate() &&
+        dataHour === new Date().getHours() && (
+          <div style={{ marginTop: marginTopData }} className="red-line"></div>
+        )}
     </div>
   );
 };
