@@ -50,8 +50,9 @@ function App() {
           return res.json();
         }
       })
-      .then((event) => {
-        setEvent([...events, event])
+      .then(() => {
+        setEvent([...events, event]);
+        console.log(events);
       })
       .catch((error) => {});
   }
