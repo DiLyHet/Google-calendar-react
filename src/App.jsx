@@ -50,7 +50,9 @@ function App() {
           return res.json();
         }
       })
-      .then((task) => {})
+      .then((event) => {
+        setEvent([...events, event])
+      })
       .catch((error) => {});
   }
 
