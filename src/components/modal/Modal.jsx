@@ -1,20 +1,89 @@
-import React, { useState } from "react";
-
+import React, { useEffect, useState } from "react";
 import "./modal.scss";
+import { faPersonWalkingDashedLineArrowRight } from "@fortawesome/free-solid-svg-icons";
 
-export default function Modal({ isOpen, onClose, events, onSubmit }) {
-  const thisTime = `${new Date()
-    .getHours()
-    .toString()
-    .padStart(2, "0")}:${new Date().getMinutes().toString().padStart(2, "0")}`;
-    const thisDay = `${new Date().getFullYear()}-${(new Date().getMonth() + 1)
+export default function Modal({ isOpen, onClose, events, onSubmit, date }) {
+  const [dataDate, setDataDate] = useState("");
+  const [dataStartTime, setDataStartTime] = useState("");
+  const [dataEndTime, setDataEndTime] = useState("");
+
+  useEffect(() => {
+    let dateIsEmpty = date==="";
+    console.log(dateIsEmpty);
+    let selectedDate = dateIsEmpty?new Date(): new Date(date);
+    const thisDay = `${selectedDate.getFullYear()}-${(selectedDate.getMonth() + 1)
       .toString()
-      .padStart(2, "0")}-${new Date().getDate().toString().padStart(2, "0")}`;
-      const [dataDate, setDataDate] = useState(thisDay);
-      const [dataStartTime, setDataStartTime] = useState(thisTime);
-      const [dataEndTime, setDataEndTime] = useState("");
-      
-      let timeInString = dataStartTime.split(":");
+      .padStart(2, "0")}-${selectedDate.getDate().toString().padStart(2, "0")}`;
+    const thisTime = `${selectedDate
+      .getHours()
+      .toString()
+      .padStart(2, "0")}:${selectedDate
+      .getMinutes()
+      .toString()
+      .padStart(2, "0")}`;
+    const endTime = `${(selectedDate.getHours() + 1)
+      .toString()
+      .padStart(2, "0")}:${selectedDate
+      .getMinutes()
+      .toString()
+      .padStart(2, "0")}`;
+    setDataDate(thisDay);
+    setDataStartTime(thisTime);
+    setDataEndTime(endTime);
+    setInputs({date: thisDay, startTime: thisTime, endTime: endTime});
+  }, [date]);
+
+  function timeDifferenceBetween(time1, time2) {
+    let [hours1, minutes1] = time1.split(":").map(Number);
+    let [hours2, minutes2] = time2.split(":").map(Number);
+    
+    let time1_minutes = hours1 * 60 + minutes1;
+    let time2_minutes = hours2 * 60 + minutes2;
+    
+    let minutesDifferent = time1_minutes - time2_minutes;
+    return minutesDifferent;
+    //console.log(minutesDifferent);
+  }
+
+  const handleChange = (event) => {
+    const name = event.target.name;
+    const value = event.target.value;
+
+    setInputs((values) => ({ ...values, [name]: value }));
+  };
+  const [inputs, setInputs] = useState({
+    date: dataDate,
+    startTime: dataStartTime,
+    endTime: dataEndTime,
+    
+  });
+  function createNewEvent() {
+    console.log(inputs);
+    if (!inputs.title || !inputs.endTime || !inputs.startTime || !inputs.date) {
+      alert("Please, fill in all fields");
+      return undefined;
+    }
+    
+    const timeDifference = timeDifferenceBetween(
+      inputs.endTime,
+      `${inputs.startTime}`
+    );
+    if (timeDifference < 15) {
+      alert("Event must be longer than 15 minutes");
+      return undefined;
+    }
+    if (timeDifference > 360) {
+      alert("Event can't be longer than 6 hours");
+      return undefined;
+    }
+
+    const parseDateTime = (dateStr, timeStr) => {
+      const [year, month, day] = dateStr.split("-").map(Number);
+      const [hours, minutes] = timeStr.split(":").map(Number);
+      return new Date(year, month - 1, day, hours, minutes);
+    };
+    const floorTime = (time)=>{
+      let timeInString = time.split(":");
       let hour = parseInt(timeInString[0], 10);
       let minutes = Math.round(parseInt(timeInString[1], 10) / 15) * 15;
       if (minutes === 60) {
@@ -24,63 +93,18 @@ export default function Modal({ isOpen, onClose, events, onSubmit }) {
           hour = 0;
         }
       }
-      hour = (hour < 10 ? "0" : "") + hour;
-      minutes = (minutes < 10 ? "0" : "") + minutes;
-      const [inputs, setInputs] = useState({
-        date: dataDate,
-        startTime: `${hour}:${minutes}`,
-      });
-
-  function timeDifferenceBetween(time1, time2) {
-    let [hours1, minutes1] = time1.split(":").map(Number);
-    let [hours2, minutes2] = time2.split(":").map(Number);
-
-    let time1_minutes = hours1 * 60 + minutes1;
-    let time2_minutes = hours2 * 60 + minutes2;
-
-    let minutesDifferent = time1_minutes - time2_minutes;
-
-    console.log(minutesDifferent);
-  }
-
-  const handleChange = (event) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    console.log(value);
-    setInputs((values) => ({ ...values, [name]: value }));
-  };
-
-  function createNewEvent() {
-    if (!inputs.title || !inputs.endTime || !inputs.startTime || !inputs.date) {
-      alert("Please, fill in all fields");
-      console.log(inputs);
-      return undefined;
+      return hour+":"+minutes;
     }
-    if (timeDifferenceBetween(dataEndTime, `${hour}:${minutes}`) < 15) {
-      alert("Event must be longer then 15 minutes");
-      return undefined;
-    }
-    if (timeDifferenceBetween(dataEndTime, `${hour}:${minutes}`) > 360) {
-      alert("Event can`t be longer then 6 hours");
-      return undefined;
-    }
-
-    const parseDateTime = (dateStr, timeStr) => {
-      const [year, month, day] = dateStr.split("-").map(Number);
-      const [hours, minutes] = timeStr.split(":").map(Number);
-      return new Date(year, month - 1, day, hours, minutes);
-    };
-
-    const dateFrom = parseDateTime(inputs.date, inputs.startTime);
-    const dateTo = parseDateTime(inputs.date, inputs.endTime);
-    const newId = events.length > 0 ? events.at(-1).id + 1 : 1;
+    const dateFrom = parseDateTime(inputs.date, floorTime(inputs.startTime));
+    const dateTo = parseDateTime(inputs.date, floorTime(inputs.endTime));
+    const newId = events.length > 0 ? events[events.length - 1].id + 1 : 1;
 
     const newEvent = {
       id: newId,
       title: inputs.title,
       description: inputs.description,
-      dateFrom: dateFrom,
-      dateTo: dateTo,
+      dateFrom,
+      dateTo,
     };
 
     return newEvent;
@@ -123,10 +147,7 @@ export default function Modal({ isOpen, onClose, events, onSubmit }) {
                     type="date"
                     name="date"
                     className="event-form__field"
-                    onChange={(event) => {
-                      setDataDate(event.target.value);
-                      handleChange(event);
-                    }}
+                    onChange={handleChange}
                     value={dataDate}
                   />
                   <input
@@ -134,7 +155,7 @@ export default function Modal({ isOpen, onClose, events, onSubmit }) {
                     name="startTime"
                     step="900"
                     className="event-form__field"
-                    value={`${hour}:${minutes}`}
+                    value={dataStartTime}
                     onChange={(event) => {
                       setDataStartTime(event.target.value);
                       handleChange(event);
@@ -150,6 +171,7 @@ export default function Modal({ isOpen, onClose, events, onSubmit }) {
                       setDataEndTime(event.target.value);
                       handleChange(event);
                     }}
+                    value={dataEndTime}
                   />
                 </div>
                 <textarea

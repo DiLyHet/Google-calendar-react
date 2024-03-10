@@ -3,7 +3,15 @@ import React, { useEffect, useState } from "react";
 import Event from "../event/Event";
 import { formatMins } from "../../../src/utils/dateUtils.js";
 
-const Hour = ({ dataHour, hourEvents, removeEvent, dataDay }) => {
+const Hour = ({
+  dataHour,
+  hourEvents,
+  removeEvent,
+  dataDay,
+  setModalInfo,
+  setTimeOnModal,
+  date,
+}) => {
   const [marginTopData, setMarginTopData] = useState(
     new Date().getMinutes() - 2
   );
@@ -15,7 +23,15 @@ const Hour = ({ dataHour, hourEvents, removeEvent, dataDay }) => {
   useEffect(() => {});
 
   return (
-    <div className="calendar__time-slot" data-time={dataHour + 1}>
+    <div
+      className="calendar__time-slot"
+      data-time={dataHour + 1}
+      onClick={() => {
+        setModalInfo(true);
+        let newDate = date;
+        newDate.setHours(dataHour);
+        setTimeOnModal(date);
+      }}>
       {hourEvents.map(({ id, dateFrom, dateTo, title }) => {
         const eventStart = `${dateFrom.getHours()}:${formatMins(
           dateFrom.getMinutes()

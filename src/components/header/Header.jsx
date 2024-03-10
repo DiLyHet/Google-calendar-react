@@ -12,14 +12,19 @@ const Header = ({
   weekEndDate,
   events,
   addEvent,
+  setModalInfo,
+  modalInfoIsOpen,
+  timeOnModalInfo,
+  setTimeOnModal,
 }) => {
-  const [modalInfoIsOpen, setModalInfo] = useState(false);
-
   return (
     <header className="header">
       <button
         className="button create-event-btn"
-        onClick={() => setModalInfo(true)}>
+        onClick={() => {
+          setModalInfo(true);
+          setTimeOnModal("");
+        }}>
         <i className="fas fa-plus create-event-btn__icon"></i>Create
       </button>
       <Modal
@@ -27,6 +32,7 @@ const Header = ({
         onClose={() => setModalInfo(false)}
         events={events}
         onSubmit={addEvent}
+        date={timeOnModalInfo}
       />
       <div className="navigation">
         <button className="navigation__today-btn button" onClick={thisWeek}>

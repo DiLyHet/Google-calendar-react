@@ -7,6 +7,9 @@ import { getWeekStartDate, generateWeekRange } from "../src/utils/dateUtils.js";
 import "./common.scss";
 
 function App() {
+  const [modalInfoIsOpen, setModalInfo] = useState(false);
+  const [timeOnModalInfo, setTimeOnModal] = useState('');
+
   const [weekStartDate, setWeekStartDate] = useState(
     getWeekStartDate(new Date())
   );
@@ -52,7 +55,7 @@ function App() {
       })
       .then(() => {
         setEvent([...events, event]);
-        console.log(events);
+        setTimeOnModal("");
       })
       .catch((error) => {});
   }
@@ -99,8 +102,9 @@ function App() {
 
   const weekEndDate = new Date(weekStartDate);
   weekEndDate.setDate(weekStartDate.getDate() + 6);
-
   console.log(events);
+
+
   return (
     <>
       <Header
@@ -111,12 +115,19 @@ function App() {
         weekEndDate={weekEndDate}
         events={events}
         addEvent={addEvent}
+        modalInfoIsOpen={modalInfoIsOpen}
+        setModalInfo={setModalInfo}
+        timeOnModalInfo={timeOnModalInfo}
+        setTimeOnModal = {setTimeOnModal}
       />
       <Calendar
         weekDates={weekDates}
         events={events}
         removeEvent={removeEvent}
         weekStartDate={weekStartDate}
+        modalInfoIsOpen={modalInfoIsOpen}
+        setModalInfo={setModalInfo}
+        setTimeOnModal={setTimeOnModal}
       />
     </>
   );

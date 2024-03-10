@@ -11,6 +11,9 @@ export default function Calendar({
   weekDates,
   removeEvent,
   weekStartDate,
+  modalInfoIsOpen,
+  setModalInfo,
+  setTimeOnModal
 }) {
   return (
     <section className="calendar">
@@ -23,6 +26,9 @@ export default function Calendar({
             events={events}
             removeEvent={removeEvent}
             weekStartDate={weekStartDate}
+            modalInfoIsOpen={modalInfoIsOpen}
+            setModalInfo={setModalInfo}
+            setTimeOnModal={setTimeOnModal}
           />
         </div>
       </div>
