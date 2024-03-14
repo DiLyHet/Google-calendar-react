@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-import './sidebar.scss';
+import "./sidebar.scss";
 
 const Sidebar = (props) => {
   const hours = Array(24)
@@ -10,7 +10,7 @@ const Sidebar = (props) => {
   return (
     <div className="calendar__time-scale">
       {hours.map((hour, id) => (
-        <div className="time-slot" key={id+1}>
+        <div className="time-slot" key={id + 1}>
           <span className="time-slot__time">{`${hour}:00`}</span>
         </div>
       ))}

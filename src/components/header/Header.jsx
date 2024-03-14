@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { months } from "../../utils/dateUtils";
 
 import "./header.scss";

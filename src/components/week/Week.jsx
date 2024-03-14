@@ -10,7 +10,7 @@ const Week = ({
   weekStartDate,
   setModalInfo,
   modalInfoIsOpen,
-  setTimeOnModal
+  setTimeOnModal,
 }) => {
   return (
     <div className="calendar__week">
@@ -19,7 +19,6 @@ const Week = ({
           dayStart.getHours() + 24
         );
 
-        //getting all events from the day we will render
         const dayEvents = events.filter(
           (event) => event.dateFrom > dayStart && event.dateTo < dayEnd
         );
@@ -28,7 +27,7 @@ const Week = ({
           <Day
             key={dayStart.getDate()}
             dataDay={dayStart.getDate()}
-            date = {dayStart}
+            date={dayStart}
             dayEvents={dayEvents}
             removeEvent={removeEvent}
             weekStartDate={weekStartDate}

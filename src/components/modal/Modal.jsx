@@ -7,9 +7,11 @@ export default function Modal({ isOpen, onClose, events, onSubmit, date }) {
   const [dataEndTime, setDataEndTime] = useState("");
 
   useEffect(() => {
-    let dateIsEmpty = date==="";
-    let selectedDate = dateIsEmpty?new Date(): new Date(date);
-    const thisDay = `${selectedDate.getFullYear()}-${(selectedDate.getMonth() + 1)
+    let dateIsEmpty = date === "";
+    let selectedDate = dateIsEmpty ? new Date() : new Date(date);
+    const thisDay = `${selectedDate.getFullYear()}-${(
+      selectedDate.getMonth() + 1
+    )
       .toString()
       .padStart(2, "0")}-${selectedDate.getDate().toString().padStart(2, "0")}`;
     const thisTime = `${selectedDate
@@ -28,16 +30,16 @@ export default function Modal({ isOpen, onClose, events, onSubmit, date }) {
     setDataDate(thisDay);
     setDataStartTime(thisTime);
     setDataEndTime(endTime);
-    setInputs({date: thisDay, startTime: thisTime, endTime: endTime});
+    setInputs({ date: thisDay, startTime: thisTime, endTime: endTime });
   }, [date]);
 
   function timeDifferenceBetween(time1, time2) {
     let [hours1, minutes1] = time1.split(":").map(Number);
     let [hours2, minutes2] = time2.split(":").map(Number);
-    
+
     let time1_minutes = hours1 * 60 + minutes1;
     let time2_minutes = hours2 * 60 + minutes2;
-    
+
     let minutesDifferent = time1_minutes - time2_minutes;
     return minutesDifferent;
   }
@@ -58,7 +60,7 @@ export default function Modal({ isOpen, onClose, events, onSubmit, date }) {
       alert("Please, fill in all fields");
       return undefined;
     }
-    
+
     const timeDifference = timeDifferenceBetween(
       inputs.endTime,
       `${inputs.startTime}`
@@ -77,7 +79,7 @@ export default function Modal({ isOpen, onClose, events, onSubmit, date }) {
       const [hours, minutes] = timeStr.split(":").map(Number);
       return new Date(year, month - 1, day, hours, minutes);
     };
-    const floorTime = (time)=>{
+    const floorTime = (time) => {
       let timeInString = time.split(":");
       let hour = parseInt(timeInString[0], 10);
       let minutes = Math.round(parseInt(timeInString[1], 10) / 15) * 15;
@@ -88,8 +90,8 @@ export default function Modal({ isOpen, onClose, events, onSubmit, date }) {
           hour = 0;
         }
       }
-      return hour+":"+minutes;
-    }
+      return hour + ":" + minutes;
+    };
     const dateFrom = parseDateTime(inputs.date, floorTime(inputs.startTime));
     const dateTo = parseDateTime(inputs.date, floorTime(inputs.endTime));
     const newId = events.length > 0 ? events[events.length - 1].id + 1 : 1;

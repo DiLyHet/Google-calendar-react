@@ -13,7 +13,7 @@ export default function Calendar({
   weekStartDate,
   modalInfoIsOpen,
   setModalInfo,
-  setTimeOnModal
+  setTimeOnModal,
 }) {
   return (
     <section className="calendar">

@@ -27,11 +27,12 @@ const Hour = ({
       className="calendar__time-slot"
       data-time={dataHour + 1}
       onClick={(e) => {
-        if (e.target == e.currentTarget){
-        setModalInfo(true);
-        let newDate = date;
-        newDate.setHours(dataHour);
-        setTimeOnModal(date);}
+        if (e.target == e.currentTarget) {
+          setModalInfo(true);
+          let newDate = date;
+          newDate.setHours(dataHour);
+          setTimeOnModal(date);
+        }
       }}>
       {hourEvents.map(({ id, dateFrom, dateTo, title }) => {
         const eventStart = `${dateFrom.getHours()}:${formatMins(

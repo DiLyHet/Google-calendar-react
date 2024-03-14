@@ -11,7 +11,7 @@ const Day = ({
   setModalInfo,
   modalInfoIsOpen,
   setTimeOnModal,
-  date
+  date,
 }) => {
   const hours = Array(24)
     .fill()
@@ -35,7 +35,7 @@ const Day = ({
             modalInfoIsOpen={modalInfoIsOpen}
             setModalInfo={setModalInfo}
             setTimeOnModal={setTimeOnModal}
-            date = {date}
+            date={date}
           />
         );
       })}
