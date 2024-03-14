@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./modal.scss";
-import { faPersonWalkingDashedLineArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 export default function Modal({ isOpen, onClose, events, onSubmit, date }) {
   const [dataDate, setDataDate] = useState("");
@@ -9,7 +8,6 @@ export default function Modal({ isOpen, onClose, events, onSubmit, date }) {
 
   useEffect(() => {
     let dateIsEmpty = date==="";
-    console.log(dateIsEmpty);
     let selectedDate = dateIsEmpty?new Date(): new Date(date);
     const thisDay = `${selectedDate.getFullYear()}-${(selectedDate.getMonth() + 1)
       .toString()
@@ -42,7 +40,6 @@ export default function Modal({ isOpen, onClose, events, onSubmit, date }) {
     
     let minutesDifferent = time1_minutes - time2_minutes;
     return minutesDifferent;
-    //console.log(minutesDifferent);
   }
 
   const handleChange = (event) => {
@@ -55,10 +52,8 @@ export default function Modal({ isOpen, onClose, events, onSubmit, date }) {
     date: dataDate,
     startTime: dataStartTime,
     endTime: dataEndTime,
-    
   });
   function createNewEvent() {
-    console.log(inputs);
     if (!inputs.title || !inputs.endTime || !inputs.startTime || !inputs.date) {
       alert("Please, fill in all fields");
       return undefined;
@@ -121,7 +116,6 @@ export default function Modal({ isOpen, onClose, events, onSubmit, date }) {
       onSubmit(toDoNewEvent);
     }
 
-    console.log(events);
     onClose();
   };
 
@@ -148,7 +142,7 @@ export default function Modal({ isOpen, onClose, events, onSubmit, date }) {
                     name="date"
                     className="event-form__field"
                     onChange={handleChange}
-                    value={dataDate}
+                    value={inputs.date}
                   />
                   <input
                     type="time"

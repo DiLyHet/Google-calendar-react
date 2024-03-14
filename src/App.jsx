@@ -8,7 +8,7 @@ import "./common.scss";
 
 function App() {
   const [modalInfoIsOpen, setModalInfo] = useState(false);
-  const [timeOnModalInfo, setTimeOnModal] = useState('');
+  const [timeOnModalInfo, setTimeOnModal] = useState("");
 
   const [weekStartDate, setWeekStartDate] = useState(
     getWeekStartDate(new Date())
@@ -17,9 +17,11 @@ function App() {
   const weekDates = generateWeekRange(getWeekStartDate(weekStartDate));
 
   const [events, setEvent] = useState([]);
+  const mockApiUrl =
+    "https://651be3e0194f77f2a5af0850.mockapi.io/api/v1/events";
 
   useEffect(() => {
-    fetch("https://651be3e0194f77f2a5af0850.mockapi.io/api/v1/events", {
+    fetch(mockApiUrl, {
       method: "GET",
       headers: { "content-type": "application/json" },
     })
@@ -43,7 +45,22 @@ function App() {
   }, []);
 
   function addEvent(event) {
-    fetch("https://651be3e0194f77f2a5af0850.mockapi.io/api/v1/events", {
+    let isOverlap = false;
+    events.forEach((currentEvent) => {
+      if (
+        event.dateFrom <= currentEvent.dateTo &&
+        event.dateTo >= currentEvent.dateFrom
+      ) {
+        isOverlap = true;
+      }
+    });
+    if (isOverlap) {
+      alert(
+        "Events cannot overlap in time. Please select a different time for the event"
+      );
+      return;
+    }
+    fetch(mockApiUrl, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(event),
@@ -61,12 +78,18 @@ function App() {
   }
 
   function removeEvent(eventId) {
-    fetch(
-      `https://651be3e0194f77f2a5af0850.mockapi.io/api/v1/events/${eventId}`,
-      {
-        method: "DELETE",
-      }
-    )
+    let thisEvent = events.find((event) => event.id === eventId);
+    let eventDate = thisEvent.dateFrom;
+    let currentDate = new Date();
+    if (eventDate - currentDate < 900000) {
+      alert(
+        "You can`t delete an event less than 15 minutes before it starts and after it ends"
+      );
+      return;
+    }
+    fetch(`${mockApiUrl}/${eventId}`, {
+      method: "DELETE",
+    })
       .then((res) => {
         if (res.ok) {
           return res.json();
@@ -102,8 +125,6 @@ function App() {
 
   const weekEndDate = new Date(weekStartDate);
   weekEndDate.setDate(weekStartDate.getDate() + 6);
-  console.log(events);
-
 
   return (
     <>
@@ -118,7 +139,7 @@ function App() {
         modalInfoIsOpen={modalInfoIsOpen}
         setModalInfo={setModalInfo}
         timeOnModalInfo={timeOnModalInfo}
-        setTimeOnModal = {setTimeOnModal}
+        setTimeOnModal={setTimeOnModal}
       />
       <Calendar
         weekDates={weekDates}
