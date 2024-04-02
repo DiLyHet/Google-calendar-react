@@ -1,10 +1,9 @@
 export const getWeekStartDate = (date) => {
   const dateCopy = new Date(date);
   const dayOfWeek = dateCopy.getDay();
-  const difference =
-    dayOfWeek === 0
-      ? -6
-      : 1 - dayOfWeek;
+  const difference = dayOfWeek === 0
+    ? -6
+    : 1 - dayOfWeek;
 
   const monday = new Date(dateCopy.setDate(date.getDate() + difference));
   return new Date(monday.getFullYear(), monday.getMonth(), monday.getDate());
@@ -26,9 +25,7 @@ export const getDateTime = (date, time) => {
   return withMinutes;
 };
 
-export const formatMins = (mins) => {
-  return mins < 10 ? `0${mins}` : mins;
-};
+export const formatMins = mins => mins < 10 ? `0${mins}` : mins;
 
 export const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 export const months = [
