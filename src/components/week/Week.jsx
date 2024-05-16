@@ -16,7 +16,6 @@ const Week = ({
     <div className="calendar__week">
       {weekDates.map(dayStart => {
         const dayEnd = new Date(dayStart.getTime()).setHours(dayStart.getHours() + 24);
-
         const dayEvents = events.filter(
           event => event.dateFrom > dayStart && event.dateTo < dayEnd,
         );
