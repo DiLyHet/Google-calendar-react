@@ -19,7 +19,7 @@ const Hour = ({
   }, 60000);
 
   useEffect(() => {});
-
+  console.log(date);
   return (
     <div
       className="calendar__time-slot"
@@ -36,7 +36,6 @@ const Hour = ({
       {hourEvents.map((id, dateFrom, dateTo, title) => {
         const eventStart = `${dateFrom.getHours()}:${formatMins(dateFrom.getMinutes())}`;
         const eventEnd = `${dateTo.getHours()}:${formatMins(dateTo.getMinutes())}`;
-        console.log(date);
         return (
           <Event
             key={id}
