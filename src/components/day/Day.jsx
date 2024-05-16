@@ -2,6 +2,7 @@ import React from 'react';
 import Hour from '../hour/Hour';
 
 import './day.scss';
+import '../../index.scss';
 
 const Day = ({
   dataDay,
@@ -18,7 +19,7 @@ const Day = ({
     .map((val, index) => index);
 
   return (
-    <div className="calendar__day" data-day={dataDay}>
+    <div className={'calendar__day'} data-day={dataDay}>
       {hours.map(hour => {
         const hourEvents = dayEvents.filter(event => event.dateFrom.getHours() === hour);
 

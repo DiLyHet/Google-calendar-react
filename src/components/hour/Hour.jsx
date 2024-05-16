@@ -33,7 +33,7 @@ const Hour = ({
         }
       }}
     >
-      {hourEvents.map(({ id, dateFrom, dateTo, title }) => {
+      {hourEvents.map(({ id, dateFrom, dateTo, title, description }) => {
         const eventStart = `${dateFrom.getHours()}:${formatMins(dateFrom.getMinutes())}`;
         const eventEnd = `${dateTo.getHours()}:${formatMins(dateTo.getMinutes())}`;
 
@@ -45,6 +45,7 @@ const Hour = ({
             marginTop={dateFrom.getMinutes()}
             time={`${eventStart} - ${eventEnd}`}
             title={title}
+            description={description}
             removeEvent={removeEvent}
             clickOnEvent={() => setEventClicked(!eventClicked)}
             clickStatus={eventClicked}

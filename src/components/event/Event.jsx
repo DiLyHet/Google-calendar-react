@@ -4,7 +4,17 @@ import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
 import './event.scss';
 
-const Event = ({ height, marginTop, title, time, removeEvent, id, clickOnEvent, clickStatus }) => {
+const Event = ({
+  height,
+  marginTop,
+  title,
+  time,
+  removeEvent,
+  id,
+  clickOnEvent,
+  clickStatus,
+  description,
+}) => {
   const eventStyle = {
     height,
     marginTop,
@@ -15,6 +25,7 @@ const Event = ({ height, marginTop, title, time, removeEvent, id, clickOnEvent, 
       <div style={eventStyle} className="event" onClick={clickOnEvent}>
         <div className="event__title">{title}</div>
         <div className="event__time">{time}</div>
+        <div className="event__time">{description}</div>
         {clickStatus && (
           <button className="delete-event-btn" onClick={() => removeEvent(id)}>
             <FontAwesomeIcon icon={faTrashCan} /> {'Remove event'}
