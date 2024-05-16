@@ -19,6 +19,7 @@ const Hour = ({
   }, 60000);
 
   useEffect(() => {});
+
   return (
     <div
       className="calendar__time-slot"
@@ -32,9 +33,10 @@ const Hour = ({
         }
       }}
     >
-      {hourEvents.map((id, dateFrom, dateTo, title) => {
+      {hourEvents.map(({ id, dateFrom, dateTo, title }) => {
         const eventStart = `${dateFrom.getHours()}:${formatMins(dateFrom.getMinutes())}`;
         const eventEnd = `${dateTo.getHours()}:${formatMins(dateTo.getMinutes())}`;
+
         return (
           <Event
             key={id}
@@ -51,9 +53,9 @@ const Hour = ({
       })}
 
       {dataDay === new Date().getDate()
-      && dataHour === new Date().getHours()
-      && date.getMonth() === new Date().getMonth()
-      && date.getFullYear() === new Date().getFullYear() && (
+        && dataHour === new Date().getHours()
+        && date.getMonth() === new Date().getMonth()
+        && date.getFullYear() === new Date().getFullYear() && (
           <div style={{ marginTop: marginTopData }} className="red-line"></div>
       )}
     </div>
