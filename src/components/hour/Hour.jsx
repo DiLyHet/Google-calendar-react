@@ -50,8 +50,11 @@ const Hour = ({
         );
       })}
 
-      {dataDay === new Date().getDate() && dataHour === new Date().getHours() && date.getMonth() === new Date().getMonth() && date.getFullYear() === new Date().getFullYear() && (
-        <div style={{ marginTop: marginTopData }} className="red-line"></div>
+      {dataDay === new Date().getDate()
+      && dataHour === new Date().getHours()
+      && date.getMonth() === new Date().getMonth()
+      && date.getFullYear() === new Date().getFullYear() && (
+          <div style={{ marginTop: marginTopData }} className="red-line"></div>
       )}
     </div>
   );

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Header from './components/header/Header.jsx';
 import Calendar from './components/calendar/Calendar.jsx';
 import { serverDeleteMethod, serverGetMethod, serverPostMethod } from './ServerCommunication.jsx';
-
 import { getWeekStartDate, generateWeekRange } from './utils/dateUtils.js';
 
 import './common.scss';
@@ -94,3 +93,6 @@ function App() {
 }
 
 export default App;
+export { events };
+export { setEvent };
+
