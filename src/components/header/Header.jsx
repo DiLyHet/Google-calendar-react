@@ -1,8 +1,8 @@
-import React from "react";
-import { months } from "../../utils/dateUtils";
+import React from 'react';
+import { months } from '../../utils/dateUtils';
 
-import "./header.scss";
-import Modal from "../modal/Modal";
+import './header.scss';
+import Modal from '../modal/Modal';
 
 const Header = ({
   nextWeek,
@@ -23,8 +23,9 @@ const Header = ({
         className="button create-event-btn"
         onClick={() => {
           setModalInfo(true);
-          setTimeOnModal("");
-        }}>
+          setTimeOnModal('');
+        }}
+      >
         <i className="fas fa-plus create-event-btn__icon"></i>Create
       </button>
       <Modal
@@ -45,12 +46,10 @@ const Header = ({
           <i className="fas fa-chevron-right"></i>
         </button>
         <span className="navigation__displayed-month">
-          {months[weekStartDate.getMonth()].slice(0, 3) ===
-          months[weekEndDate.getMonth()].slice(0, 3)
+          {months[weekStartDate.getMonth()].slice(0, 3)
+          === months[weekEndDate.getMonth()].slice(0, 3)
             ? months[weekStartDate.getMonth()].slice(0, 3)
-            : months[weekStartDate.getMonth()].slice(0, 3) +
-              " - " +
-              months[weekEndDate.getMonth()].slice(0, 3)}
+            : months[weekStartDate.getMonth()].slice(0, 3) + ' - ' + months[weekEndDate.getMonth()].slice(0, 3)}
         </span>
       </div>
     </header>

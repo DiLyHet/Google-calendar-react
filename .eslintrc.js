@@ -28,11 +28,17 @@ module.exports = {
     'global-require': 0,
     'class-methods-use-this': 0,
     'import/no-extraneous-dependencies': 0,
-    'arrow-body-style': 1,
+    'arrow-body-style': 0,
     'prefer-arrow-callback': 1,
     'linebreak-style': 'off',
     'no-confusing-arrow': 0,
     'arrow-parens': 0,
+    'prefer-template': 0,
+    'prefer-destructuring': 0,
+    'object-curly-newline': 0,
+    'object-shorthand': 0,
+    'no-else-return': 0,
+    'consistent-return': 0,
   },
   settings: {
     'import/resolver': {

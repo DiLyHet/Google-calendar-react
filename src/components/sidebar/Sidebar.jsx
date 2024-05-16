@@ -1,8 +1,8 @@
-import React from "react";
+import React from 'react';
 
-import "./sidebar.scss";
+import './sidebar.scss';
 
-const Sidebar = (props) => {
+const Sidebar = props => {
   const hours = Array(24)
     .fill()
     .map((val, index) => index);

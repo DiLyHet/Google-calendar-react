@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
-import Event from "../event/Event";
-import { formatMins } from "../../../src/utils/dateUtils.js";
+import Event from '../event/Event';
+import { formatMins } from '../../src/utils/dateUtils.js';
 
 const Hour = ({
   dataHour,
@@ -12,11 +12,9 @@ const Hour = ({
   setTimeOnModal,
   date,
 }) => {
-  const [marginTopData, setMarginTopData] = useState(
-    new Date().getMinutes() - 2
-  );
+  const [marginTopData, setMarginTopData] = useState(new Date().getMinutes() - 2);
   const [eventClicked, setEventClicked] = useState(false);
-  let timerOfUpdatingRedLine = setInterval(() => {
+  setInterval(() => {
     setMarginTopData(marginTopData + 1);
   }, 60000);
 
@@ -26,22 +24,19 @@ const Hour = ({
     <div
       className="calendar__time-slot"
       data-time={dataHour + 1}
-      onClick={(e) => {
-        if (e.target == e.currentTarget) {
+      onClick={e => {
+        if (e.target === e.currentTarget) {
           setModalInfo(true);
-          let newDate = date;
+          const newDate = date;
           newDate.setHours(dataHour);
           setTimeOnModal(date);
         }
-      }}>
-      {hourEvents.map(({ id, dateFrom, dateTo, title }) => {
-        const eventStart = `${dateFrom.getHours()}:${formatMins(
-          dateFrom.getMinutes()
-        )}`;
-        const eventEnd = `${dateTo.getHours()}:${formatMins(
-          dateTo.getMinutes()
-        )}`;
-
+      }}
+    >
+      {hourEvents.map((id, dateFrom, dateTo, title) => {
+        const eventStart = `${dateFrom.getHours()}:${formatMins(dateFrom.getMinutes())}`;
+        const eventEnd = `${dateTo.getHours()}:${formatMins(dateTo.getMinutes())}`;
+        console.log(date);
         return (
           <Event
             key={id}
@@ -57,10 +52,9 @@ const Hour = ({
         );
       })}
 
-      {dataDay === new Date().getDate() &&
-        dataHour === new Date().getHours() && (
-          <div style={{ marginTop: marginTopData }} className="red-line"></div>
-        )}
+      {dataDay === new Date().getDate() && dataHour === new Date().getHours() && (
+        <div style={{ marginTop: marginTopData }} className="red-line"></div>
+      )}
     </div>
   );
 };
