@@ -9,11 +9,11 @@ import './calendar.scss';
 export default function Calendar({
   events,
   weekDates,
-  removeEvent,
   weekStartDate,
   modalInfoIsOpen,
   setModalInfo,
   setTimeOnModal,
+  setEvent,
 }) {
   return (
     <section className="calendar">
@@ -24,11 +24,11 @@ export default function Calendar({
           <Week
             weekDates={weekDates}
             events={events}
-            removeEvent={removeEvent}
             weekStartDate={weekStartDate}
             modalInfoIsOpen={modalInfoIsOpen}
             setModalInfo={setModalInfo}
             setTimeOnModal={setTimeOnModal}
+            setEvent={setEvent}
           />
         </div>
       </div>

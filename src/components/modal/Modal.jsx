@@ -1,67 +1,57 @@
 import React, { useEffect, useState } from 'react';
+import { createNewEvent } from '../../gateway/index.js';
 import './modal.scss';
 
-export default function Modal({ isOpen, onClose, events, onSubmit, date }) {
-  const [dataDate, setDataDate] = useState('');
-  const [dataStartTime, setDataStartTime] = useState('');
-  const [dataEndTime, setDataEndTime] = useState('');
+export default function Modal({ isOpen, onClose, events, setEvent, date, setTimeOnModal }) {
   const [inputs, setInputs] = useState({
-    date: dataDate,
-    startTime: dataStartTime,
-    endTime: dataEndTime,
+    date: '',
+    startTime: '',
+    endTime: '',
+    title: '',
+    description: '',
   });
 
   useEffect(() => {
-    const dateIsEmpty = date === '';
-    const selectedDate = dateIsEmpty ? new Date() : new Date(date);
-    const thisDay = `${selectedDate.getFullYear()}-${(selectedDate.getMonth() + 1)
-      .toString()
-      .padStart(2, '0')}-${selectedDate.getDate().toString().padStart(2, '0')}`;
-    const thisTime = `${selectedDate.getHours().toString().padStart(2, '0')}:${selectedDate
-      .getMinutes()
-      .toString()
-      .padStart(2, '0')}`;
-    const endTime = `${(selectedDate.getHours() + 1).toString().padStart(2, '0')}:${selectedDate
-      .getMinutes()
-      .toString()
-      .padStart(2, '0')}`;
-    setDataDate(thisDay);
-    setDataStartTime(thisTime);
-    setDataEndTime(endTime);
-    setInputs({ date: thisDay, startTime: thisTime, endTime: endTime });
+    const selectedDate = date ? new Date(date) : new Date();
+    const formatTime = time => time.toString().padStart(2, '0');
+    const formattedDate = `${selectedDate.getFullYear()}-${formatTime(selectedDate.getMonth() + 1)}-${formatTime(selectedDate.getDate())}`;
+    const formattedStartTime = `${formatTime(selectedDate.getHours())}:${formatTime(selectedDate.getMinutes())}`;
+    const formattedEndTime = `${formatTime(selectedDate.getHours() + 1)}:${formatTime(selectedDate.getMinutes())}`;
+
+    setInputs(prevInputs => ({
+      ...prevInputs,
+      date: formattedDate,
+      startTime: formattedStartTime,
+      endTime: formattedEndTime,
+    }));
   }, [date]);
 
-  function timeDifferenceBetween(time1, time2) {
-    const [hours1, minutes1] = time1.split(':').map(Number);
-    const [hours2, minutes2] = time2.split(':').map(Number);
-
-    const time1Minutes = hours1 * 60 + minutes1;
-    const time2Minutes = hours2 * 60 + minutes2;
-
-    const minutesDifferent = time1Minutes - time2Minutes;
-    return minutesDifferent;
-  }
-
-  const handleChange = event => {
-    const name = event.target.name;
-    const value = event.target.value;
-
-    setInputs(values => ({ ...values, [name]: value }));
+  const handleInputChange = e => {
+    const { name, value } = e.target;
+    setInputs(prevInputs => ({ ...prevInputs, [name]: value }));
   };
-  function createNewEvent() {
-    if (!inputs.title || !inputs.endTime || !inputs.startTime || !inputs.date) {
+
+  const calculateTimeDifference = (start, end) => {
+    const [startHours, startMinutes] = start.split(':').map(Number);
+    const [endHours, endMinutes] = end.split(':').map(Number);
+    return endHours * 60 + endMinutes - (startHours * 60 + startMinutes);
+  };
+
+  const createEvent = () => {
+    const { title, date, startTime, endTime, description } = inputs;
+    if (!title || !date || !startTime || !endTime) {
       alert('Please, fill in all fields');
-      return undefined;
+      return null;
     }
 
-    const timeDifference = timeDifferenceBetween(inputs.endTime, `${inputs.startTime}`);
+    const timeDifference = calculateTimeDifference(startTime, endTime);
     if (timeDifference < 15) {
       alert('Event must be longer than 15 minutes');
-      return undefined;
+      return null;
     }
     if (timeDifference > 360) {
       alert("Event can't be longer than 6 hours");
-      return undefined;
+      return null;
     }
 
     const parseDateTime = (dateStr, timeStr) => {
@@ -69,111 +59,115 @@ export default function Modal({ isOpen, onClose, events, onSubmit, date }) {
       const [hours, minutes] = timeStr.split(':').map(Number);
       return new Date(year, month - 1, day, hours, minutes);
     };
-    const floorTime = time => {
-      const timeInString = time.split(':');
-      let hour = parseInt(timeInString[0], 10);
-      let minutes = Math.round(parseInt(timeInString[1], 10) / 15) * 15;
+
+    const roundToNearestQuarterHour = time => {
+      let [hours, minutes] = time.split(':').map(Number);
+      minutes = Math.round(minutes / 15) * 15;
       if (minutes === 60) {
         minutes = 0;
-        hour += 1;
-        if (hour === 24) {
-          hour = 0;
-        }
+        hours += 1;
       }
-      return hour + ':' + minutes;
+      if (hours === 24) hours = 0;
+      return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
     };
-    const dateFrom = parseDateTime(inputs.date, floorTime(inputs.startTime));
-    const dateTo = parseDateTime(inputs.date, floorTime(inputs.endTime));
-    const newId = events.length > 0 ? events[events.length - 1].id + 1 : 1;
 
-    const newEvent = {
+    const eventStart = parseDateTime(date, roundToNearestQuarterHour(startTime));
+    const eventEnd = parseDateTime(date, roundToNearestQuarterHour(endTime));
+    const newId = events.length > 0 ? Number(events[events.length - 1].id) + 1 : 1;
+
+    return {
       id: newId,
-      title: inputs.title,
-      description: inputs.description,
-      dateFrom,
-      dateTo,
+      title,
+      description,
+      dateFrom: eventStart,
+      dateTo: eventEnd,
     };
+  };
 
-    return newEvent;
+  async function addEvent(event) {
+    let isOverlap = false;
+    events.forEach(currentEvent => {
+      if (event.dateFrom <= currentEvent.dateTo && event.dateTo >= currentEvent.dateFrom) {
+        isOverlap = true;
+      }
+    });
+    if (isOverlap) {
+      alert('Events cannot overlap in time. Please select a different time for the event');
+      return;
+    }
+    try {
+      await createNewEvent(event);
+      setEvent([...events, event]);
+      setTimeOnModal('');
+      onClose();
+    } catch (error) {
+      alert('Internal Server Error. Can`t create event ' + error);
+    }
   }
 
-  const handleSubmit = event => {
-    event.preventDefault();
-
-    const toDoNewEvent = createNewEvent();
-
-    if (toDoNewEvent === undefined) {
-      return undefined;
-    } else {
-      onSubmit(toDoNewEvent);
+  const handleSubmit = e => {
+    e.preventDefault();
+    const newEvent = createEvent();
+    if (newEvent) {
+      addEvent(newEvent);
     }
-
-    onClose();
   };
 
   return (
-    <>
-      {isOpen && (
-        <div className="modal overlay">
-          <div className="modal__content">
-            <div className="create-event">
-              <button className="create-event__close-btn" onClick={onClose}>
-                +
-              </button>
-              <form className="event-form" onSubmit={handleSubmit}>
+    isOpen && (
+      <div className="modal overlay">
+        <div className="modal__content">
+          <div className="create-event-window">
+            <button className="create-event-window__close-btn" onClick={onClose}>
+              +
+            </button>
+            <form className="event-form" onSubmit={handleSubmit}>
+              <input
+                type="text"
+                name="title"
+                placeholder="Title"
+                className="event-form__field"
+                onChange={handleInputChange}
+              />
+              <div className="event-form__time">
                 <input
-                  type="text"
-                  name="title"
-                  placeholder="Title"
+                  type="date"
+                  name="date"
                   className="event-form__field"
-                  onChange={handleChange}
+                  onChange={handleInputChange}
+                  value={inputs.date}
                 />
-                <div className="event-form__time">
-                  <input
-                    type="date"
-                    name="date"
-                    className="event-form__field"
-                    onChange={handleChange}
-                    value={inputs.date}
-                  />
-                  <input
-                    type="time"
-                    name="startTime"
-                    step="900"
-                    className="event-form__field"
-                    value={dataStartTime}
-                    onChange={event => {
-                      setDataStartTime(event.target.value);
-                      handleChange(event);
-                    }}
-                  />
-                  <span>-</span>
-                  <input
-                    type="time"
-                    step="900"
-                    name="endTime"
-                    className="event-form__field"
-                    onChange={event => {
-                      setDataEndTime(event.target.value);
-                      handleChange(event);
-                    }}
-                    value={dataEndTime}
-                  />
-                </div>
-                <textarea
-                  name="description"
-                  placeholder="Description"
+                <input
+                  type="time"
+                  name="startTime"
+                  step="900"
                   className="event-form__field"
-                  onChange={handleChange}
-                ></textarea>
-                <button type="submit" className="event-form__submit-btn">
-                  Create
-                </button>
-              </form>
-            </div>
+                  value={inputs.startTime}
+                  onChange={handleInputChange}
+                />
+                <span>-</span>
+                <input
+                  type="time"
+                  step="900"
+                  name="endTime"
+                  className="event-form__field"
+                  value={inputs.endTime}
+                  onChange={handleInputChange}
+                />
+              </div>
+              <textarea
+                name="description"
+                placeholder="Description"
+                className="event-form__field"
+                onChange={handleInputChange}
+              ></textarea>
+              <button type="submit" className="event-form__submit-btn">
+                Create
+              </button>
+            </form>
           </div>
         </div>
-      )}
-    </>
+      </div>
+    )
   );
 }

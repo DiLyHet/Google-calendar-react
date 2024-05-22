@@ -6,19 +6,17 @@ import { formatMins } from '../../utils/dateUtils.js';
 const Hour = ({
   dataHour,
   hourEvents,
-  removeEvent,
   dataDay,
   setModalInfo,
   setTimeOnModal,
   date,
+  events,
+  setEvent,
 }) => {
   const [marginTopData, setMarginTopData] = useState(new Date().getMinutes() - 2);
-  const [eventClicked, setEventClicked] = useState(false);
   setInterval(() => {
     setMarginTopData(marginTopData + 1);
   }, 60000);
-
-  useEffect(() => {});
 
   return (
     <div
@@ -46,9 +44,8 @@ const Hour = ({
             time={`${eventStart} - ${eventEnd}`}
             title={title}
             description={description}
-            removeEvent={removeEvent}
-            clickOnEvent={() => setEventClicked(!eventClicked)}
-            clickStatus={eventClicked}
+            events={events}
+            setEvent={setEvent}
           />
         );
       })}

@@ -1,22 +1,37 @@
 import React from 'react';
-import { months } from '../../utils/dateUtils';
+import { months, getWeekStartDate } from '../../utils/dateUtils';
 
 import './header.scss';
 import Modal from '../modal/Modal';
 
 const Header = ({
-  nextWeek,
-  lastWeek,
-  thisWeek,
   weekStartDate,
-  weekEndDate,
   events,
-  addEvent,
   setModalInfo,
   modalInfoIsOpen,
   timeOnModalInfo,
   setTimeOnModal,
+  setEvent,
+  setWeekStartDate,
 }) => {
+  const nextWeek = () => {
+    const nextWeekStartDay = new Date(weekStartDate);
+    nextWeekStartDay.setDate(weekStartDate.getDate() + ((7 - weekStartDate.getDay() + 1) % 7 || 7));
+    setWeekStartDate(nextWeekStartDay);
+  };
+
+  const lastWeek = () => {
+    const lastWeekStartDay = new Date(weekStartDate);
+    lastWeekStartDay.setDate(weekStartDate.getDate() - ((7 - weekStartDate.getDay() + 1) % 7 || 7));
+    setWeekStartDate(lastWeekStartDay);
+  };
+
+  const thisWeek = () => {
+    setWeekStartDate(getWeekStartDate(new Date()));
+  };
+
+  const weekEndDate = new Date(weekStartDate.setDate(weekStartDate.getDate() + 6));
+
   return (
     <header className="header">
       <button
@@ -32,8 +47,9 @@ const Header = ({
         isOpen={modalInfoIsOpen}
         onClose={() => setModalInfo(false)}
         events={events}
-        onSubmit={addEvent}
         date={timeOnModalInfo}
+        setTimeOnModal={setTimeOnModal}
+        setEvent={setEvent}
       />
       <div className="navigation">
         <button className="navigation__today-btn button" onClick={thisWeek}>
@@ -46,10 +62,12 @@ const Header = ({
           <i className="fas fa-chevron-right"></i>
         </button>
         <span className="navigation__displayed-month">
-          {months[weekStartDate.getMonth()].slice(0, 3)
-          === months[weekEndDate.getMonth()].slice(0, 3)
+          {months[weekStartDate.getMonth()].slice(0, 3) ===
+          months[weekEndDate.getMonth()].slice(0, 3)
             ? months[weekStartDate.getMonth()].slice(0, 3)
-            : months[weekStartDate.getMonth()].slice(0, 3) + ' - ' + months[weekEndDate.getMonth()].slice(0, 3)}
+            : months[weekStartDate.getMonth()].slice(0, 3) +
+              ' - ' +
+              months[weekEndDate.getMonth()].slice(0, 3)}
         </span>
       </div>
     </header>
