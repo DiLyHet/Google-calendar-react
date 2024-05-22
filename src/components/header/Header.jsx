@@ -17,6 +17,7 @@ const Header = ({
   const nextWeek = () => {
     const nextWeekStartDay = new Date(weekStartDate);
     nextWeekStartDay.setDate(weekStartDate.getDate() + ((7 - weekStartDate.getDay() + 1) % 7 || 7));
+
     setWeekStartDate(nextWeekStartDay);
   };
 
@@ -30,7 +31,8 @@ const Header = ({
     setWeekStartDate(getWeekStartDate(new Date()));
   };
 
-  const weekEndDate = new Date(weekStartDate.setDate(weekStartDate.getDate() + 6));
+  const weekEndDate = new Date(weekStartDate);
+  weekEndDate.setDate(weekStartDate.getDate() + 6);
 
   return (
     <header className="header">
