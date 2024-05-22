@@ -16,7 +16,6 @@ export const fetchEvents = () => {
 };
 
 export const createNewEvent = event => {
-  console.log(event);
   return fetch(mockApiUrl, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
