@@ -13,7 +13,7 @@ const Event = ({ height, marginTop, title, time, id, description, events, setEve
 
   const [eventClicked, setEventClicked] = useState(false);
 
-  function removeEvent(eventId) {
+  const removeEvent = eventId => {
     const thisEvent = events.find(event => event.id === eventId);
     const eventDate = thisEvent.dateFrom;
     const currentDate = new Date();
@@ -28,7 +28,7 @@ const Event = ({ height, marginTop, title, time, id, description, events, setEve
       .catch(() => {
         alert('Internal Server Error. Can`t delete event');
       });
-  }
+  };
 
   return (
     <div style={eventStyle} className="event" onClick={() => setEventClicked(!eventClicked)}>

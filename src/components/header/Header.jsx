@@ -1,19 +1,9 @@
 import React from 'react';
-import { months, getWeekStartDate } from '../../utils/dateUtils';
+import { months, getWeekStartDate } from '../../utils';
 
 import './header.scss';
-import Modal from '../modal/Modal';
 
-const Header = ({
-  weekStartDate,
-  events,
-  setModalInfo,
-  modalInfoIsOpen,
-  timeOnModalInfo,
-  setTimeOnModal,
-  setEvent,
-  setWeekStartDate,
-}) => {
+const Header = ({ weekStartDate, setIsModalOpen, setTimeOnModal, setWeekStartDate }) => {
   const nextWeek = () => {
     const nextWeekStartDay = new Date(weekStartDate);
     nextWeekStartDay.setDate(weekStartDate.getDate() + ((7 - weekStartDate.getDay() + 1) % 7 || 7));
@@ -39,29 +29,22 @@ const Header = ({
       <button
         className="button create-event-btn"
         onClick={() => {
-          setModalInfo(true);
+          setIsModalOpen(true);
           setTimeOnModal('');
         }}
       >
-        <i className="fas fa-plus create-event-btn__icon"></i>Create
+        <i className="fas fa-plus create-event-btn__icon" />
+        Create
       </button>
-      <Modal
-        isOpen={modalInfoIsOpen}
-        onClose={() => setModalInfo(false)}
-        events={events}
-        date={timeOnModalInfo}
-        setTimeOnModal={setTimeOnModal}
-        setEvent={setEvent}
-      />
       <div className="navigation">
         <button className="navigation__today-btn button" onClick={thisWeek}>
           Today
         </button>
         <button className="icon-button navigation__nav-icon" onClick={lastWeek}>
-          <i className="fas fa-chevron-left"></i>
+          <i className="fas fa-chevron-left" />
         </button>
         <button className="icon-button navigation__nav-icon" onClick={nextWeek}>
-          <i className="fas fa-chevron-right"></i>
+          <i className="fas fa-chevron-right" />
         </button>
         <span className="navigation__displayed-month">
           {months[weekStartDate.getMonth()].slice(0, 3) ===

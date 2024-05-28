@@ -42,3 +42,30 @@ export const months = [
   'November',
   'December',
 ];
+
+export const getHoursArr = Array(24)
+  .fill()
+  .map((_, index) => index);
+
+export const calculateTimeDifference = (start, end) => {
+  const [startHours, startMinutes] = start.split(':').map(Number);
+  const [endHours, endMinutes] = end.split(':').map(Number);
+  return endHours * 60 + endMinutes - (startHours * 60 + startMinutes);
+};
+
+export const getParseDateTime = (dateStr, timeStr) => {
+  const [year, month, day] = dateStr.split('-').map(Number);
+  const [hours, minutes] = timeStr.split(':').map(Number);
+  return new Date(year, month - 1, day, hours, minutes);
+};
+
+export const roundToNearestQuarterHour = time => {
+  let [hours, minutes] = time.split(':').map(Number);
+  minutes = Math.round(minutes / 15) * 15;
+  if (minutes === 60) {
+    minutes = 0;
+    hours += 1;
+  }
+  if (hours === 24) hours = 0;
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+};

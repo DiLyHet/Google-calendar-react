@@ -1,5 +1,6 @@
 import React from 'react';
 import Hour from '../hour/Hour';
+import { getHoursArr } from '../../utils';
 
 import '../../index.scss';
 
@@ -7,17 +8,13 @@ const Day = ({
   dataDay,
   dayEvents,
   weekStartDate,
-  setModalInfo,
-  modalInfoIsOpen,
+  setIsModalOpen,
+  isModalOpen,
   setTimeOnModal,
   date,
   events,
   setEvent,
 }) => {
-  const getHoursArr = Array(24)
-    .fill()
-    .map((_, index) => index);
-
   return (
     <div className={'calendar__day'} data-day={dataDay}>
       {getHoursArr.map(hour => {
@@ -30,8 +27,8 @@ const Day = ({
             hourEvents={hourEvents}
             dataDay={dataDay}
             weekStartDate={weekStartDate}
-            modalInfoIsOpen={modalInfoIsOpen}
-            setModalInfo={setModalInfo}
+            isModalOpen={isModalOpen}
+            setIsModalOpen={setIsModalOpen}
             setTimeOnModal={setTimeOnModal}
             date={date}
             events={events}

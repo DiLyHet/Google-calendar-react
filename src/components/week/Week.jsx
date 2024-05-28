@@ -7,8 +7,8 @@ const Week = ({
   weekDates,
   events,
   weekStartDate,
-  setModalInfo,
-  modalInfoIsOpen,
+  setIsModalOpen,
+  isModalOpen,
   setTimeOnModal,
   setEvent,
 }) => {
@@ -28,8 +28,8 @@ const Week = ({
             dayEvents={dayEvents}
             events={events}
             weekStartDate={weekStartDate}
-            modalInfoIsOpen={modalInfoIsOpen}
-            setModalInfo={setModalInfo}
+            isModalOpen={isModalOpen}
+            setIsModalOpen={setIsModalOpen}
             setTimeOnModal={setTimeOnModal}
             setEvent={setEvent}
           />

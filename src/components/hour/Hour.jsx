@@ -1,22 +1,27 @@
 import React, { useEffect, useState } from 'react';
 
 import Event from '../event/Event';
-import { formatMins } from '../../utils/dateUtils.js';
+import { formatMins } from '../../utils/index.js';
 
 const Hour = ({
   dataHour,
   hourEvents,
   dataDay,
-  setModalInfo,
+  setIsModalOpen,
   setTimeOnModal,
   date,
   events,
   setEvent,
 }) => {
   const [marginTopData, setMarginTopData] = useState(new Date().getMinutes() - 2);
-  setInterval(() => {
-    setMarginTopData(marginTopData + 1);
-  }, 60000);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setMarginTopData(prevMarginTopData => prevMarginTopData + 1);
+    }, 60000);
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
     <div
@@ -24,7 +29,7 @@ const Hour = ({
       data-time={dataHour + 1}
       onClick={e => {
         if (e.target === e.currentTarget) {
-          setModalInfo(true);
+          setIsModalOpen(true);
           const newDate = date;
           newDate.setHours(dataHour);
           setTimeOnModal(date);
@@ -50,12 +55,12 @@ const Hour = ({
         );
       })}
 
-      {dataDay === new Date().getDate()
-        && dataHour === new Date().getHours()
-        && date.getMonth() === new Date().getMonth()
-        && date.getFullYear() === new Date().getFullYear() && (
-          <div style={{ marginTop: marginTopData }} className="red-line"></div>
-      )}
+{dataDay === new Date().getDate()
+  && dataHour === new Date().getHours()
+  && date.getMonth() === new Date().getMonth()
+  && date.getFullYear() === new Date().getFullYear()
+  && <div style={{ marginTop: marginTopData }} className="red-line"></div>}
+
     </div>
   );
 };

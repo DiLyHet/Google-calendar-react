@@ -1,23 +1,49 @@
-import React from 'react';
-
+import React, { useEffect, useState } from 'react';
 import Navigation from '../navigation/Navigation';
 import Week from '../week/Week';
 import Sidebar from '../sidebar/Sidebar';
-
+import Modal from '../modal/Modal';
+import { fetchEvents } from '../../gateway/index.js';
+import { getWeekStartDate, generateWeekRange } from '../../utils/index.js';
 import './calendar.scss';
 
-export default function Calendar({
-  events,
-  weekDates,
+const Calendar = ({
   weekStartDate,
-  modalInfoIsOpen,
-  setModalInfo,
+  isModalOpen,
+  setIsModalOpen,
   setTimeOnModal,
-  setEvent,
-}) {
+  timeOnModalInfo,
+}) => {
+  const [events, setEvent] = useState([]);
+
+  const weekDates = generateWeekRange(getWeekStartDate(weekStartDate));
+  useEffect(() => {
+    fetchEvents()
+      .then(eventsList => {
+        setEvent(
+          eventsList.map(event => ({
+            ...event,
+            dateFrom: new Date(event.dateFrom),
+            dateTo: new Date(event.dateTo),
+          })),
+        );
+      })
+      .catch(() => {
+        alert('Internal Server Error. Can`t display events');
+      });
+  }, []);
   return (
     <section className="calendar">
       <Navigation weekDates={weekDates} />
+      {isModalOpen && (
+        <Modal
+          onClose={() => setIsModalOpen(false)}
+          events={events}
+          date={timeOnModalInfo}
+          setTimeOnModal={setTimeOnModal}
+          setEvent={setEvent}
+        />
+      )}
       <div className="calendar__body">
         <div className="calendar__week-container">
           <Sidebar />
@@ -25,8 +51,8 @@ export default function Calendar({
             weekDates={weekDates}
             events={events}
             weekStartDate={weekStartDate}
-            modalInfoIsOpen={modalInfoIsOpen}
-            setModalInfo={setModalInfo}
+            isModalOpen={isModalOpen}
+            setIsModalOpen={setIsModalOpen}
             setTimeOnModal={setTimeOnModal}
             setEvent={setEvent}
           />
@@ -34,4 +60,6 @@ export default function Calendar({
       </div>
     </section>
   );
-}
+};
+
+export default Calendar;
