@@ -11,10 +11,9 @@ const Calendar = ({
   weekStartDate,
   isModalOpen,
   setIsModalOpen,
-  setTimeOnModal,
-  timeOnModalInfo,
 }) => {
   const [events, setEvent] = useState([]);
+  const [modalTime, setModalTime] = useState('');
 
   const weekDates = generateWeekRange(getWeekStartDate(weekStartDate));
   useEffect(() => {
@@ -39,8 +38,8 @@ const Calendar = ({
         <Modal
           onClose={() => setIsModalOpen(false)}
           events={events}
-          date={timeOnModalInfo}
-          setTimeOnModal={setTimeOnModal}
+          date={modalTime}
+          setModalTime={setModalTime}
           setEvent={setEvent}
         />
       )}
@@ -53,7 +52,7 @@ const Calendar = ({
             weekStartDate={weekStartDate}
             isModalOpen={isModalOpen}
             setIsModalOpen={setIsModalOpen}
-            setTimeOnModal={setTimeOnModal}
+            setModalTime={setModalTime}
             setEvent={setEvent}
           />
         </div>

@@ -3,7 +3,7 @@ import { months, getWeekStartDate } from '../../utils';
 
 import './header.scss';
 
-const Header = ({ weekStartDate, setIsModalOpen, setTimeOnModal, setWeekStartDate }) => {
+const Header = ({ weekStartDate, setIsModalOpen, setWeekStartDate }) => {
   const nextWeek = () => {
     const nextWeekStartDay = new Date(weekStartDate);
     nextWeekStartDay.setDate(weekStartDate.getDate() + ((7 - weekStartDate.getDay() + 1) % 7 || 7));
@@ -30,7 +30,6 @@ const Header = ({ weekStartDate, setIsModalOpen, setTimeOnModal, setWeekStartDat
         className="button create-event-btn"
         onClick={() => {
           setIsModalOpen(true);
-          setTimeOnModal('');
         }}
       >
         <i className="fas fa-plus create-event-btn__icon" />

@@ -8,7 +8,7 @@ const Hour = ({
   hourEvents,
   dataDay,
   setIsModalOpen,
-  setTimeOnModal,
+  setModalTime,
   date,
   events,
   setEvent,
@@ -30,9 +30,8 @@ const Hour = ({
       onClick={e => {
         if (e.target === e.currentTarget) {
           setIsModalOpen(true);
-          const newDate = date;
-          newDate.setHours(dataHour);
-          setTimeOnModal(date);
+          date.setHours(dataHour);
+          setModalTime(date);
         }
       }}
     >
@@ -55,12 +54,12 @@ const Hour = ({
         );
       })}
 
-{dataDay === new Date().getDate()
-  && dataHour === new Date().getHours()
-  && date.getMonth() === new Date().getMonth()
-  && date.getFullYear() === new Date().getFullYear()
-  && <div style={{ marginTop: marginTopData }} className="red-line"></div>}
-
+      {dataDay === new Date().getDate() &&
+        dataHour === new Date().getHours() &&
+        date.getMonth() === new Date().getMonth() &&
+        date.getFullYear() === new Date().getFullYear() && (
+          <div style={{ marginTop: marginTopData }} className="red-line" />
+      )}
     </div>
   );
 };

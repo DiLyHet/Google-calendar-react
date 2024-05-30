@@ -7,7 +7,7 @@ import {
 } from '../../utils/index.js';
 import './modal.scss';
 
-const Modal = ({ onClose, events, setEvent, date, setTimeOnModal }) => {
+const Modal = ({ onClose, events, setEvent, date, setModalTime }) => {
   const [inputs, setInputs] = useState({
     date: '',
     startTime: '',
@@ -67,13 +67,10 @@ const Modal = ({ onClose, events, setEvent, date, setTimeOnModal }) => {
   };
 
   const addEvent = async event => {
-    let isOverlap = false;
-
-    events.forEach(currentEvent => {
-      if (event.dateFrom <= currentEvent.dateTo && event.dateTo >= currentEvent.dateFrom) {
-        isOverlap = true;
-      }
-    });
+    const isOverlap = events.some(
+      currentEvent =>
+        event.dateFrom <= currentEvent.dateTo && event.dateTo >= currentEvent.dateFrom,
+    );
 
     if (isOverlap) {
       alert('Events cannot overlap in time. Please select a different time for the event');
@@ -83,7 +80,7 @@ const Modal = ({ onClose, events, setEvent, date, setTimeOnModal }) => {
     try {
       await createNewEvent(event);
       setEvent([...events, event]);
-      setTimeOnModal('');
+      setModalTime('');
       onClose();
     } catch (error) {
       alert('Internal Server Error. Can`t create event ' + error);
@@ -102,7 +99,13 @@ const Modal = ({ onClose, events, setEvent, date, setTimeOnModal }) => {
     <div className="modal overlay">
       <div className="modal__content">
         <div className="create-event-window">
-          <button className="create-event-window__close-btn" onClick={onClose}>
+          <button
+            className="create-event-window__close-btn"
+            onClick={() => {
+              setModalTime('');
+              onClose();
+            }}
+          >
             +
           </button>
           <form className="event-form" onSubmit={handleSubmit}>

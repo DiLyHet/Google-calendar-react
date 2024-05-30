@@ -9,7 +9,7 @@ const Week = ({
   weekStartDate,
   setIsModalOpen,
   isModalOpen,
-  setTimeOnModal,
+  setModalTime,
   setEvent,
 }) => {
   return (
@@ -30,7 +30,7 @@ const Week = ({
             weekStartDate={weekStartDate}
             isModalOpen={isModalOpen}
             setIsModalOpen={setIsModalOpen}
-            setTimeOnModal={setTimeOnModal}
+            setModalTime={setModalTime}
             setEvent={setEvent}
           />
         );

@@ -10,7 +10,7 @@ const Day = ({
   weekStartDate,
   setIsModalOpen,
   isModalOpen,
-  setTimeOnModal,
+  setModalTime,
   date,
   events,
   setEvent,
@@ -29,7 +29,7 @@ const Day = ({
             weekStartDate={weekStartDate}
             isModalOpen={isModalOpen}
             setIsModalOpen={setIsModalOpen}
-            setTimeOnModal={setTimeOnModal}
+            setModalTime={setModalTime}
             date={date}
             events={events}
             setEvent={setEvent}

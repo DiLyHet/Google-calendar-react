@@ -6,7 +6,6 @@ import './common.scss';
 
 const App = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [timeOnModalInfo, setTimeOnModal] = useState('');
   const [weekStartDate, setWeekStartDate] = useState(getWeekStartDate(new Date()));
 
   return (
@@ -14,15 +13,12 @@ const App = () => {
       <Header
         weekStartDate={weekStartDate}
         setIsModalOpen={setIsModalOpen}
-        setTimeOnModal={setTimeOnModal}
         setWeekStartDate={setWeekStartDate}
       />
       <Calendar
-        timeOnModalInfo={timeOnModalInfo}
         weekStartDate={weekStartDate}
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
-        setTimeOnModal={setTimeOnModal}
       />
     </>
   );
