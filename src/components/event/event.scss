@@ -7,7 +7,9 @@
   padding: 8px;
   color: #fff;
   display: flex;
-  
+  flex-direction: column;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  opacity: 1;
 
   &__title {
     width: 100%;
@@ -18,7 +20,7 @@
   &__description {
     margin-top: 10px;
     margin-bottom: 5px;
-    padding-top: 7px;
+    padding-top: 10px;
     font-size: 13px;
     border-top: 0.5px solid;
   }
@@ -29,14 +31,19 @@
     cursor: pointer;
   }
 
+  &.fade-out {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
 }
-.event-information{
+
+.event-information {
   scrollbar-width: thin;
   scrollbar-color: #888 transparent;
-  position: absolute;
   overflow: auto;
   width: calc(100% - 12px);
   height: 85%;
+
   &::-webkit-scrollbar {
     width: 6px;
   }
@@ -54,10 +61,28 @@
     background: #555;
   }
 }
+
 .delete-event-btn {
   cursor: pointer;
   border: none;
   position: absolute;
-  right: -20%;
-  bottom: -5%;
+  right: -20px;
+  bottom: -30px;
+  padding: 10px;
+  border-radius: 50px;
+  background-color: hsl(183, 77%, 74%);
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+
+  .event:hover & {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  &:hover {
+    background-color: hsl(183, 77%, 64%);
+  }
 }
