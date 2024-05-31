@@ -6,12 +6,19 @@
   border-radius: 8px;
   padding: 8px;
   color: #fff;
+  display: flex;
   
 
   &__title {
     width: 100%;
     overflow-wrap: break-word;
     margin-bottom: 8px;
+  }
+
+  &__description {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-size: 12px;
   }
 
   &:hover {
@@ -27,7 +34,7 @@
   position: absolute;
   overflow: auto;
   width: 97%;
-  height: 90%;
+  height: 85%;
   &::-webkit-scrollbar {
     width: 6px;
   }
