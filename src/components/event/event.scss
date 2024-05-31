@@ -4,7 +4,7 @@
   background-color: cornflowerblue;
   z-index: 1;
   border-radius: 8px;
-  // padding: 8px;
+  padding: 8px 0 8px 8px;
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -41,7 +41,7 @@
   scrollbar-width: thin;
   scrollbar-color: #888 transparent;
   overflow: auto;
-  padding: 8px;
+  padding-right: 8px;
 
   &::-webkit-scrollbar {
     width: 6px;
