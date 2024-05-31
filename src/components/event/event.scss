@@ -35,7 +35,7 @@
   scrollbar-color: #888 transparent;
   position: absolute;
   overflow: auto;
-  width: 97%;
+  width: calc(100% - 12px);
   height: 85%;
   &::-webkit-scrollbar {
     width: 6px;
