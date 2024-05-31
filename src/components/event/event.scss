@@ -6,13 +6,11 @@
   border-radius: 8px;
   padding: 8px;
   color: #fff;
-  overflow: auto;
+  
 
   &__title {
     width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    overflow-wrap: break-word;
     margin-bottom: 8px;
   }
 
@@ -22,6 +20,14 @@
     color: black;
   }
 
+}
+.event-information{
+  scrollbar-width: thin;
+  scrollbar-color: #888 transparent;
+  position: absolute;
+  overflow: auto;
+  width: 97%;
+  height: 90%;
   &::-webkit-scrollbar {
     width: 6px;
   }
@@ -39,12 +45,6 @@
     background: #555;
   }
 }
-
-.event {
-  scrollbar-width: thin;
-  scrollbar-color: #888 transparent;
-}
-
 .delete-event-btn {
   cursor: pointer;
   border: none;

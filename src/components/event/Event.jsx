@@ -32,15 +32,18 @@ const Event = ({ height, marginTop, title, time, id, description, events, setEve
 
   return (
     <div style={eventStyle} className="event" onClick={() => setEventClicked(!eventClicked)}>
-      <div className="event__title">{title}</div>
-      <div className="event__time">{time}</div>
-      <div className="event__time">{description}</div>
-      {eventClicked && (
-        <button className="delete-event-btn" onClick={() => removeEvent(id)}>
-          <FontAwesomeIcon icon={faTrashCan} /> {'Remove event'}
-        </button>
-      )}
-    </div>
+  <div className="event-information">
+    <div className="event__title">{title}</div>
+    <div className="event__time">{time}</div>
+    <div className="event__description">{description}</div>
+  </div>
+  {eventClicked && (
+    <button className="delete-event-btn" onClick={() => removeEvent(id)}>
+      <FontAwesomeIcon icon={faTrashCan} /> {'Remove event'}
+    </button>
+  )}
+</div>
+
   );
 };
 
