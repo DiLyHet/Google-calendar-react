@@ -41,8 +41,8 @@
   scrollbar-width: thin;
   scrollbar-color: #888 transparent;
   overflow: auto;
-  width: calc(100% - 12px);
   height: 85%;
+  width: 100%;
 
   &::-webkit-scrollbar {
     width: 6px;
